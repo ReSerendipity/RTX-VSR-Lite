@@ -1,0 +1,9 @@
+# RTX_VSR-lite 运行依赖
+#
+# 注意：以下仅为 PyPI 上可安装的依赖。
+# NVIDIA RTX VSR 的核心库 nvvfx **不在 PyPI 上**，必须从 NVIDIA VSR SDK 获取，
+# 详见 README 的「安装 nvvfx」一节。
+
+numpy>=1.24.0
+torch>=2.0.0
+opencv-python-headless>=4.8.0

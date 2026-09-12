@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# 虚拟环境
+venv/
+.venv/
+env/
+
+# 测试与工具缓存
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+
+# 系统
+Thumbs.db
+.DS_Store
+
+# 处理产物（避免误把视频提交进仓库）
+output/
+outputs/
+*.mp4
+*.mkv
+*.avi
+*.mov
