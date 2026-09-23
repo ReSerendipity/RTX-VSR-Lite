@@ -1,0 +1,153 @@
+{
+  "summary": {
+    "projectName": "RTX_VSR-lite",
+    "locale": "zh-CN",
+    "modelId": "agent-work-loop-v4",
+    "reportContractVersion": 26,
+    "overview": "RTX_VSR-lite 的说明文档与实际代码、CLI、依赖高度一致，安装与环境自检路径清晰；主要薄弱点是核心数值行为缺少可执行的回归验证。逐条会话证据本次未纳入，学习闭环保持为证据边界（不作缺陷结论）。",
+    "aiAgentPractice": {
+      "inspectedSurfaces": [],
+      "coverageRows": [
+        {
+          "surface": "Skills",
+          "scopes": [
+            "Plugin"
+          ],
+          "count": 4,
+          "paths": [
+            "~/.qoder/plugins/cache/qoder-bundler/better-harness/skills/better-harness/SKILL.md",
+            "~/.qoder/plugins/cache/qoder-bundler/computer-use/skills/computer-use/SKILL.md",
+            "~/.qoder/plugins/cache/qoder-bundler/qoder-create-plugin/skills/create-plugin/SKILL.md",
+            "~/.qoder/plugins/cache/qoderapp-bundler/qoder-context/1.0.61.7f8d7bb7/skills/qoder-context-knowledge-plan/SKILL.md"
+          ]
+        },
+        {
+          "surface": "Hooks",
+          "scopes": [
+            "Plugin"
+          ],
+          "count": 5,
+          "paths": [
+            "~/.qoder/plugins/cache/qoderapp-bundler/qoder-context/1.0.61.7f8d7bb7/hooks/hooks.json"
+          ]
+        },
+        {
+          "surface": "MCP",
+          "scopes": [
+            "Plugin"
+          ],
+          "count": 2,
+          "paths": [
+            "~/.qoder/plugins/cache/qoder-bundler/computer-use/.mcp.json",
+            "~/.qoder/plugins/cache/qoderapp-bundler/qoder-context/1.0.61.7f8d7bb7/mcp.json"
+          ]
+        },
+        {
+          "surface": "Plugins",
+          "scopes": [
+            "Plugin"
+          ],
+          "count": 4,
+          "paths": [
+            "~/.qoder/plugins/cache/qoder-bundler/better-harness/.qoder-plugin/plugin.json",
+            "~/.qoder/plugins/cache/qoder-bundler/computer-use/.qoder-plugin/plugin.json",
+            "~/.qoder/plugins/cache/qoderapp-bundler/qoder-context/1.0.61.7f8d7bb7/.qoder-plugin/plugin.json",
+            "~/.qoder/plugins/cache/qoder-bundler/qoder-create-plugin"
+          ]
+        },
+        {
+          "surface": "Rules",
+          "scopes": [
+            "Project"
+          ],
+          "count": 0
+        },
+        {
+          "surface": "Commands",
+          "scopes": [
+            "Project"
+          ],
+          "count": 0
+        },
+        {
+          "surface": "Custom Agents",
+          "scopes": [
+            "Project"
+          ],
+          "count": 0
+        },
+        {
+          "surface": "Workflows",
+          "scopes": [
+            "Project"
+          ],
+          "count": 0
+        },
+        {
+          "surface": "Memories",
+          "scopes": [
+            "Project"
+          ],
+          "count": 0
+        }
+      ],
+      "repositorySourceRows": []
+    },
+    "assignmentSummaries": [],
+    "dimensions": [
+      {
+        "id": "task-understanding",
+        "label": "任务理解",
+        "score": 66,
+        "summary": "README 与 upscaler/video_processor/main、requirements、start.bat 逐条一致且当前有效，为改动提供了清晰的上下文与边界；但缺少任务级证据来验证它在真实任务中被使用。",
+        "findingRefs": []
+      },
+      {
+        "id": "controlled-execution",
+        "label": "可控执行",
+        "score": 62,
+        "summary": "安装、自检与运行路径已声明且与代码一致，但本次未从干净环境执行，nvvfx 在场时的实际可运行性仍未被证实。",
+        "findingRefs": []
+      },
+      {
+        "id": "change-validation",
+        "label": "改动验证",
+        "score": 46,
+        "summary": "仅有 --dry-run 做环境与参数自检；核心数值不变量没有任何可执行回归检查，编辑超分逻辑后拿不到行为证据。",
+        "findingRefs": [
+          "core-invariants-no-executable-check"
+        ]
+      },
+      {
+        "id": "reliable-delivery",
+        "label": "可靠交付",
+        "score": 50,
+        "summary": "外部评审/CI/发布边界未打开故不可判定；代码内有半成品清理与显式退出码等安全中止迹象，但未在任务中被验证。",
+        "findingRefs": []
+      },
+      {
+        "id": "learning-capture",
+        "label": "经验沉淀",
+        "score": 40,
+        "summary": "逐条会话证据未准入（0 条可用 Episode、5 个长会话候选结果复核为 0），本次无法区分重复工作与干净窗口；这是证据边界，不作缺陷结论。",
+        "findingRefs": []
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "core-invariants-no-executable-check",
+      "title": "编辑超分核心逻辑后，无法验证 README 承诺的尺寸对齐与质量映射行为",
+      "severity": "Medium",
+      "reason": "事实：README 把「输出尺寸向下对齐到 8 的倍数」「通道顺序与输入一致不会偏色」「--quality 解析成 SDK 枚举成员」当作对用户的明确保证；而仓库唯一的自检 --dry-run 只做输入路径存在性、width/height 互斥、nvvfx 是否在场三项判断，随后打印解析出的档位/尺寸并返回 0，并不对这些不变量做任何断言；仓库 0 个测试文件。推断：snap_to_grid、VideoSuperRes.target_size_for、_resolve_quality 的档位→枚举解析、BGR→planar→uint8 往返、VideoProcessor._iter_videos 等逻辑都不依赖 nvvfx、可离线测试，却没有任何可执行检查覆盖。影响：一次对齐或档位映射的回归会顺利通过 --dry-run 并静默发布，改动核心逻辑时得不到快速反馈。不确定性：本次未运行应用或测试，未观测到实际回归，仅就检查承载缺失下结论；这是检查覆盖缺口，不是已确认的缺陷。owner：改动验证 / 相关校验。",
+      "expectedOutput": [
+        "Update the existing Test owner identified by the reviewed evidence and retain a focused validation result."
+      ],
+      "expectedArtifact": "Test",
+      "aiFixPrompt": "/better-harness fix this issue\n\n为核心数值不变量补齐不依赖 nvvfx 的可执行回归检查，让编辑 upscaler.py / video_processor.py 后能立即得到行为证据。只新增测试与最小断言，不改业务行为，不动 nvvfx 相关运行路径。\n\n## 先做什么\n\n1. 在仓库根创建 tests/ 并新增 tests/test_upscaler.py（标准库 unittest，requirements.txt 无需新增依赖）。\n2. 覆盖以下无需 SDK 的纯逻辑：\n   - snap_to_grid：向下吸附到 8 的倍数（如 1082→1080、1080→1080、非整倍与浮点输入）；\n   - VideoSuperRes.target_size_for：显式宽高 > scale_factor > 维持源分辨率 的优先级与对齐结果；\n   - _resolve_quality：用桩对象模拟 effects.QualityLevel，断言 QUALITY_MEMBERS 命中第一个可用成员、全部缺失时抛 VsrUnavailable；\n   - VideoProcessor._iter_videos：按 DEFAULT_EXTENSIONS 过滤且不递归、排序稳定。\n3. 保持 import rtx_vsr 不在无 SDK 时崩溃（引擎延迟加载），测试不得触发真实 initialize()。\n\n## 范围\n\n只添加离线单元测试与断言；不改算法、不引入新第三方依赖、不改动 CLI 语义。README 若因新自检行为需要说明再最小同步。\n\n## 怎样算完成\n\n- `python -m unittest discover -s tests -v` 全部通过；\n- 上面四类不变量各有至少一条正例和一条边界/负例；\n- 故意改坏 snap_to_grid 或档位映射时，测试会失败（证明检查有效）。\n\n## 验证\n\n- 运行 `python -m unittest discover -s tests -v`，确认通过且用例数覆盖四类逻辑；\n- 确认测试在未安装 nvvfx 的环境下也能运行（不 import 真实 SDK）。",
+      "dimensionRefs": [
+        "change-validation"
+      ]
+    }
+  ]
+}
