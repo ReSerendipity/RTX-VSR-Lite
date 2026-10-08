@@ -37,3 +37,6 @@ outputs/
 *.mkv
 *.avi
 *.mov
+
+# 工具链工作产物（AI harness 本地工作区，勿入库）
+.qoder/
