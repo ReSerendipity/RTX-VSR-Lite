@@ -47,6 +47,13 @@ pip install -r requirements.txt
 
 也可以直接运行 `start.bat`，它会自动完成建虚拟环境、装依赖、打印用法三步。
 
+若希望以开发模式安装，并直接使用控制台命令（等价于 `python main.py`）：
+
+```bash
+pip install -e .
+rtx-vsr --input video.mp4 --output upscaled.mp4 --scale 2x
+```
+
 ### 3. 安装 nvvfx（关键步骤）
 
 `nvvfx` **不在 PyPI 上**，`pip install nvidia-vfx` 这类命令目前是无效的。请从 NVIDIA 官方渠道获取 VSR SDK：
@@ -133,6 +140,7 @@ RTX_VSR-lite/
 │   ├── upscaler.py          # nvvfx 引擎封装、尺寸对齐
 │   └── video_processor.py   # OpenCV 解码 -> 超分 -> 编码管道
 ├── main.py                  # CLI 入口
+├── pyproject.toml           # 打包元数据与 ruff/mypy 工具配置
 ├── requirements.txt         # PyPI 依赖（不含 nvvfx）
 ├── start.bat                # Windows 一键装环境
 ├── LICENSE                  # Apache-2.0 全文
@@ -178,6 +186,10 @@ A：可以。`import rtx_vsr` 不会触发 `nvvfx` 导入（引擎是延迟加�
 ### Q：为什么 `--quality` 传了却没效果？
 
 A：本工具会把档位名解析成 SDK 的 `QualityLevel` 枚举成员再传入，而不是裸整数——不同 SDK 版本枚举成员命名不一致，代码里 `QUALITY_MEMBERS` 给了候选列表，若你的版本命中不到会抛 `VsrUnavailable` 并列出可用成员，按提示补一个名字即可。
+
+## 贡献
+
+开发环境、测试与提交规范见 [CONTRIBUTING.md](CONTRIBUTING.md)，变更记录见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## 许可证
 

@@ -1,0 +1,33 @@
+# 提交前检查（P1-1）
+#
+# 目的：在 git commit 前自动运行 lint 与格式化，拦截低级问题。
+# 使用本地已安装的工具（language: system），不依赖远端仓库 rev，避免版本漂移。
+#
+# 安装前置：
+#   pip install -r requirements-dev.txt
+#   pre-commit install
+minimum_pre_commit_version: "3.5.0"
+repos:
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff (lint)
+        entry: ruff check --force-exclude
+        language: system
+        types_or: [python, pyi]
+        require_serial: true
+      - id: ruff-format
+        name: ruff (format)
+        entry: ruff format --force-exclude
+        language: system
+        types_or: [python, pyi]
+        require_serial: true
+      # 类型检查当前仍有既有告警（见 CHANGELOG「已知遗留」），故置于 manual 阶段，
+      # 不阻塞日常提交；可随修复进度提升到 pre-commit 阶段。
+      - id: mypy
+        name: mypy (类型检查，手动/CI 触发)
+        entry: mypy
+        language: system
+        types_or: [python, pyi]
+        pass_filenames: false
+        stages: [manual]

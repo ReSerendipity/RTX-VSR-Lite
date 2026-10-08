@@ -1,0 +1,5 @@
+# 开发 / 提交前工具（P1-1）——仅本地开发与 CI 使用，运行时不需要。
+# 与 pyproject.toml 中的 [tool.ruff] / [tool.mypy] 配置配套。
+ruff==0.16.10
+mypy==1.13.0
+pre-commit>=3.5.0

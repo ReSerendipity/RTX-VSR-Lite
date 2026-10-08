@@ -1,0 +1,81 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 ReSerendipity
+#
+# 打包与项目元数据。
+# 运行时依赖与 requirements.txt 保持一致；核心后端 nvvfx 不在 PyPI 上，无法通过
+# 依赖声明获取，需自行从 NVIDIA VSR SDK 安装（详见 README「安装 nvvfx」一节）。
+
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rtx-vsr-lite"
+version = "1.0.0"
+description = "Standalone NVIDIA RTX Video Super Resolution (VSR) video upscaler CLI - upscale videos via the nvvfx SDK, no ComfyUI required."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "ReSerendipity" }]
+keywords = [
+    "rtx-vsr",
+    "nvvfx",
+    "upscaling",
+    "video-super-resolution",
+    "cli",
+    "nvidia",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "Natural Language :: Chinese (Simplified)",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Video",
+]
+dependencies = [
+    "numpy>=1.24.0,<3.0.0",
+    "torch>=2.0.0,<3.0.0",
+    "opencv-python-headless>=4.8.0,<5.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/ReSerendipity/RTX-VSR-Lite"
+Repository = "https://github.com/ReSerendipity/RTX-VSR-Lite"
+Issues = "https://github.com/ReSerendipity/RTX-VSR-Lite/issues"
+
+[project.scripts]
+rtx-vsr = "main:main"
+
+[tool.setuptools]
+py-modules = ["main"]
+
+[tool.setuptools.packages.find]
+include = ["rtx_vsr*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+extend-exclude = [".qoder"]
+
+[tool.ruff.lint]
+# 起步采用保守规则集（语法错误 + 未定义/未使用名 + import 基础错误），
+# 与既有代码保持一致、不引入无关改动；后续可逐步收紧。
+select = ["E4", "E7", "E9", "F"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+python_version = "3.10"
+files = ["rtx_vsr", "main.py", "tests"]
+# nvvfx / torch 等依赖无法在本机安装或缺少类型桩，忽略其导入缺失告警。
+ignore_missing_imports = true
+warn_unused_configs = true
+

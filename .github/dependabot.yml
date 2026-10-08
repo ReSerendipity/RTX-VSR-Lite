@@ -1,0 +1,12 @@
+# 依赖更新通知（P1-3）
+# 每周检查一次 pip 依赖与 GitHub Actions，发现新版本/安全公告时自动创建 PR。
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
