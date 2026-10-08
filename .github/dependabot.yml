@@ -1,12 +1,21 @@
 # 依赖更新通知（P1-3）
-# 每周检查一次 pip 依赖与 GitHub Actions，发现新版本/安全公告时自动创建 PR。
+# 每月检查一次 pip 依赖与 GitHub Actions；限流配置见下（与其余 8 仓统一口径）。
 version: 2
 updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
