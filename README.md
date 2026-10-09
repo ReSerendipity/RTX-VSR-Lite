@@ -33,8 +33,8 @@
 ### 1. 克隆仓库
 
 ```bash
-git clone https://github.com/ReSerendipity/RTX_VSR-lite.git
-cd RTX_VSR-lite
+git clone https://github.com/ReSerendipity/RTX-VSR-Lite.git
+cd RTX-VSR-Lite
 ```
 
 ### 2. 安装 Python 依赖
@@ -134,15 +134,24 @@ with VideoSuperRes(quality="high", output_width=1920, output_height=1080) as sr:
 ## 目录结构
 
 ```
-RTX_VSR-lite/
+RTX-VSR-Lite/
+├── .github/
+│   ├── workflows/           # CI（离线回归测试）与 Release 工作流
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── ISSUE_TEMPLATE/       # Bug / 功能建议模板
 ├── rtx_vsr/
 │   ├── __init__.py          # 公开 API 导出
 │   ├── upscaler.py          # nvvfx 引擎封装、尺寸对齐
 │   └── video_processor.py   # OpenCV 解码 -> 超分 -> 编码管道
+├── tests/
+│   └── test_upscaler.py     # 不依赖 nvvfx 的离线回归测试
 ├── main.py                  # CLI 入口
 ├── pyproject.toml           # 打包元数据与 ruff/mypy 工具配置
 ├── requirements.txt         # PyPI 依赖（不含 nvvfx）
+├── requirements-dev.txt     # 开发/提交前工具依赖
 ├── start.bat                # Windows 一键装环境
+├── CONTRIBUTING.md          # 贡献指南
+├── CHANGELOG.md             # 更新日志
 ├── LICENSE                  # Apache-2.0 全文
 └── NOTICE                   # 版权与第三方归属声明
 ```
@@ -194,6 +203,8 @@ A：本工具会把档位名解析成 SDK 的 `QualityLevel` 枚举成员再传�
 ## 许可证
 
 Apache License 2.0（全文见 [LICENSE](LICENSE)）。
+
+Copyright 2026 ReSerendipity。
 
 本项目代码为**独立实现**，仅通过公开 API 调用 NVIDIA `nvvfx` SDK，不包含、不衍生自任何 GPL 许可的代码。用 `with`/`ExitStack` 管理的引擎生命周期、按 8 向下对齐的尺寸策略、OpenCV 视频管道与 CLI 均为本仓库原创。
 
