@@ -58,7 +58,7 @@ rtx-vsr --input video.mp4 --output upscaled.mp4 --scale 2x
 
 `nvvfx` **不在 PyPI 上**，`pip install nvidia-vfx` 这类命令目前是无效的。请从 NVIDIA 官方渠道获取 VSR SDK：
 
-- **NVIDIA NGC**：<https://catalog.ngc.nvidia.com/orgs/nvidia/containers/vsr-sdk>
+- **NVIDIA NGC**：<https://catalog.ngc.nvidia.com/orgs/nvidia/maxine/collections/nvvfxvideosuperres/->
 - 若你的环境已有 ComfyUI-KJNodes 且能正常使用 `nvidia_rtx_vsr`，说明本机已存在可用的 `nvvfx`，本工具可直接复用，无需额外安装。
 
 装好后自检：
