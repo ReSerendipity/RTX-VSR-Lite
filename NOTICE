@@ -33,6 +33,16 @@ Attribution & relationship to third-party projects
    in this repository. The GPL-3.0 terms of that project therefore do not
    extend to this work.
 
+3. Repository contents
+
+   No third-party source code, binary or asset file is included in this
+   repository's git tree. Every third-party dependency is referenced by
+   declaration only (requirements.txt / pyproject.toml) and is obtained by
+   the user under its own terms.
+
+   The original code in this repository is licensed under Apache-2.0; the full
+   text is shipped as LICENSE.
+
 ===============================================================================
 No warranty
 ===============================================================================
